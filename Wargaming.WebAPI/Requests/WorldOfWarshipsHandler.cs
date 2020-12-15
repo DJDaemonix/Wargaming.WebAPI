@@ -25,9 +25,9 @@ namespace Wargaming.WebAPI.Requests
 		public async Task<IEnumerable<PlayerData>> FetchPlayerAsync(params uint[] accountIds)
 		{
 			using HttpResponseMessage response = await GetRequestAsync("account/info/", new ApiArgument("account_id", string.Join(',', accountIds)));
-			ApiResponse<IDictionary<uint, PlayerData>> parsedRequest = await ParseResponseFullAsync<IDictionary<uint, PlayerData>>(response);
+			ApiResponse<Dictionary<uint, PlayerData>> parsedRequest = await ParseResponseFullAsync<Dictionary<uint, PlayerData>>(response);
 
-			return new List<PlayerData>(from KeyValuePair<uint, PlayerData> result in parsedRequest.Data select result.Value);
+			return new List<PlayerData>(parsedRequest.Data.Select(obj => obj.Value));
 		}
 	}
 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -23,7 +23,8 @@ namespace Wargaming.WebAPI
 		protected static JsonSerializerOptions SerializerOptions { get; } = new()
 		{
 			PropertyNamingPolicy = SnakeCaseNamingPolicy.Instance,
-			PropertyNameCaseInsensitive = true
+			PropertyNameCaseInsensitive = true,
+			NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowReadingFromString
 		};
 
 
