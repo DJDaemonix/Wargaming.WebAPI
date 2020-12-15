@@ -13,10 +13,19 @@ namespace Wargaming.WebAPI
 {
 	public class ApiHandler
 	{
+		public const int MaxResultsInRequest = 100;
+
 		protected IHttpClientFactory ClientFactory { get; init; }
 
 		protected string Host { get; init; }
 		protected string AppId { get; init; }
+
+		protected static JsonSerializerOptions SerializerOptions { get; } = new()
+		{
+			PropertyNamingPolicy = SnakeCaseNamingPolicy.Instance,
+			PropertyNameCaseInsensitive = true
+		};
+
 
 		public ApiHandler(IHttpClientFactory factory, Game game, Region region, string appId)
 		{
@@ -24,6 +33,7 @@ namespace Wargaming.WebAPI
 			Host = GetApiHost(game, region);
 			AppId = appId ?? throw new ArgumentNullException(nameof(appId));
 		}
+
 
 		public async Task<HttpResponseMessage> GetRequestAsync(string endpoint, params ApiArgument[] arguments)
 		{
@@ -34,21 +44,22 @@ namespace Wargaming.WebAPI
 			return await client.GetAsync(path);
 		}
 
-		public static async Task<TData> ParseResponseAsync<TData>(HttpResponseMessage response) where TData : class, new()
+		public static async Task<TData> ParseResponseDataAsync<TData>(HttpResponseMessage response)
+		{
+			return (await ParseResponseFullAsync<TData>(response)).Data;
+		}
+
+		internal static async Task<ApiResponse<TData>> ParseResponseFullAsync<TData>(HttpResponseMessage response)
 		{
 			try
 			{
-				ApiResponse parsedResponse = JsonSerializer.Deserialize<ApiResponse>(await response.Content.ReadAsStringAsync(), new() 
-					{	
-						PropertyNamingPolicy = SnakeCaseNamingPolicy.Instance, 
-						PropertyNameCaseInsensitive = true 
-					});
+				ApiResponse<TData> parsedResponse = JsonSerializer.Deserialize<ApiResponse<TData>>(await response.Content.ReadAsStringAsync(), SerializerOptions);
 
-				return parsedResponse.Data as TData;
+				return parsedResponse;
 			}
 			catch
 			{
-				return null; 
+				return null;
 			}
 		}
 

@@ -8,7 +8,7 @@
 	{
 		public string Status { get; init; }
 
-		public object Meta { get; init; }
+		public ResponseMeta Meta { get; init; }
 
 		public object Data { get; init; }
 	}
@@ -22,7 +22,7 @@
 	{
 		public string Status { get; init; }
 
-		public object Meta { get; init; }
+		public ResponseMeta Meta { get; init; }
 
 		public TData Data { get; init; }
 	}
