@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
@@ -34,7 +34,16 @@ namespace Wargaming.WebAPI
 			Host = GetApiHost(game, region);
 			AppId = appId ?? throw new ArgumentNullException(nameof(appId));
 		}
-
+		public ApiHandler(IHttpClientFactory factory, string host, string appId)
+		{
+			ClientFactory = factory ?? throw new ArgumentNullException(nameof(factory));
+			Host = host ?? throw new ArgumentNullException(nameof(host));
+			AppId = appId;
+		}
+		protected ApiHandler(IHttpClientFactory factory)
+		{
+			ClientFactory = factory ?? throw new ArgumentNullException(nameof(factory));
+		}
 
 		public async Task<HttpResponseMessage> GetRequestAsync(string endpoint, params ApiArgument[] arguments)
 		{
@@ -54,7 +63,8 @@ namespace Wargaming.WebAPI
 		{
 			try
 			{
-				ApiResponse<TData> parsedResponse = JsonSerializer.Deserialize<ApiResponse<TData>>(await response.Content.ReadAsStringAsync(), SerializerOptions);
+				string json = await response.Content.ReadAsStringAsync();
+				ApiResponse<TData> parsedResponse = JsonSerializer.Deserialize<ApiResponse<TData>>(json, SerializerOptions);
 
 				return parsedResponse;
 			}

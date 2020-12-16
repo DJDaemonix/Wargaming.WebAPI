@@ -13,6 +13,7 @@ namespace Wargaming.WebAPI.Requests
 	public class WorldOfWarshipsHandler : ApiHandler
 	{
 		public WorldOfWarshipsHandler(IHttpClientFactory factory, Region region, string appId) : base(factory, Game.WOWS, region, appId) { }
+		protected WorldOfWarshipsHandler(IHttpClientFactory factory) : base(factory) { }
 
 		// Api : account/list/
 		public async Task<IEnumerable<PlayerListing>> ListPlayersAsync(string search)
