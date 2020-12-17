@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Wargaming.WebAPI.Models;
 using Wargaming.WebAPI.Models.Api;
 using Wargaming.WebAPI.Utilities;
 using static Wargaming.WebAPI.ApiProperties;

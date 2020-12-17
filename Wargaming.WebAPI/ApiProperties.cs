@@ -1,8 +1,9 @@
-﻿namespace Wargaming.WebAPI
+﻿using Wargaming.WebAPI.Models;
+
+namespace Wargaming.WebAPI
 {
 	public static class ApiProperties
 	{
-		public enum Region { EU, NA, CIS, ASIA }
 		public enum Game { WG, WOT, WOWS, WOWP }
 
 		public static string GetApiHost(Game game, Region region) => apiHosts[(int)game][(int)region];

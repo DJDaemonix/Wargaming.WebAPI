@@ -4,9 +4,11 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Wargaming.WebAPI.Models;
 using Wargaming.WebAPI.Models.Api;
 using Wargaming.WebAPI.Models.WorldOfWarships.Responses;
-using static Wargaming.WebAPI.ApiProperties;
+
+
 
 namespace Wargaming.WebAPI.Requests
 {
@@ -28,12 +30,12 @@ namespace Wargaming.WebAPI.Requests
 		};
 
 		// Api : accounts/{id}
-		public async Task<IEnumerable<PlayerData>> FetchPlayerAsync(uint accountId)
+		public async Task<IEnumerable<AccountInfo>> FetchPlayerAsync(uint accountId)
 		{
 			using HttpResponseMessage response = await GetRequestAsync($"accounts/{accountId}/");
-			ApiResponse<Dictionary<uint, PlayerData>> parsedRequest = await ParseResponseFullAsync<Dictionary<uint, PlayerData>>(response);
+			ApiResponse<Dictionary<uint, AccountInfo>> parsedRequest = await ParseResponseFullAsync<Dictionary<uint, AccountInfo>>(response);
 
-			return new List<PlayerData>(parsedRequest.Data.Select(obj => obj.Value));
+			return new List<AccountInfo>(parsedRequest.Data.Select(obj => obj.Value));
 		}
 	}
 }
