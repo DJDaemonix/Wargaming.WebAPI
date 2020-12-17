@@ -4,15 +4,15 @@
 
 namespace Wargaming.WebAPI.Models.WorldOfWarships.Responses
 {
-	public class ClanSeason
+	public record ClanSeason
 	{
-		public int Id { get; set; }
+		public int Id { get; init; }
 
-		public string Name { get; set; }
+		public string Name { get; init; }
 
-		public long StartTimeSeconds { get; set; }
+		public long StartTimeSeconds { get; init; }
 
-		public ClanLeague[] Leagues { get; set; }
+		public ClanLeague[] Leagues { get; init; }
 
 		public DateTime StartTime => DateTime.UnixEpoch.AddSeconds(StartTimeSeconds);
 	}

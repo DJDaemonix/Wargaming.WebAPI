@@ -4,17 +4,17 @@ using System.Runtime.Serialization;
 
 namespace Wargaming.WebAPI.Models.WorldOfWarships.Responses
 {
-	public class Ship
+	public record Ship
 	{
-		public string Name { get; set; }
+		public string Name { get; init; }
 
-		public int Tier { get; set; }
+		public int Tier { get; init; }
 
-		public long Id { get; set; }
+		public long Id { get; init; }
 
-		public ShipType Type { get; set; }
+		public ShipType Type { get; init; }
 
-		public bool Testship { get; set; }
+		public bool Testship { get; init; }
 	}
 
 

@@ -1,13 +1,25 @@
 ﻿namespace Wargaming.WebAPI.Models.WorldOfWarships.Responses
 {
-	public class Clan
+	public record Clan
 	{
-		public long Id { get; set; }
+		public long Id { get; init; }
 
-		public string Tag { get; set; }
+		public string Tag { get; init; }
 
-		public string Name { get; set; }
+		public string Name { get; init; }
 
-		public int Color { get; set; }
+		public int Color { get; init; }
+
+		public int? MembersCount { get; init; }
+	}
+
+	public enum ClanRole
+	{
+		Commander,
+		ExecutiveOfficer,
+		Recruiter,
+		CommissionedOfficer,
+		LineOfficer,
+		Midshipman
 	}
 }

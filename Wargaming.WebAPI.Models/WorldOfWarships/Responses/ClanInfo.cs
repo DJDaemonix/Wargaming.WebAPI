@@ -2,19 +2,19 @@ using System.Linq;
 
 namespace Wargaming.WebAPI.Models.WorldOfWarships.Responses
 {
-	public class ClanInfo
+	public record ClanInfo
 	{
-		public long Id { get; set; }
+		public long Id { get; init; }
 
-		public string Tag { get; set; }
+		public string Tag { get; init; }
 
-		public string Name { get; set; }
+		public string Name { get; init; }
 
-		public string Color { get; set; }
+		public string Color { get; init; }
 
-		public int Rank { get; set; } = -1;
+		public int Rank { get; init; } = -1;
 
-		public ClanLadder Ladder { get; set; }
+		public ClanLadder Ladder { get; init; }
 
 //		public Region Region => LeadingRating.Realm.RealmStringToRegion();
 
@@ -22,7 +22,7 @@ namespace Wargaming.WebAPI.Models.WorldOfWarships.Responses
 //		  ? Ladder.RatingRealm.RealmStringToRegion()
 //		  : Ladder.Realm.RealmStringToRegion();
 
-		public int CurrentSeasonId { get; set; }
+		public int CurrentSeasonId { get; init; }
 
 		public ClanRating AlphaRating => Ladder.Ratings.SingleOrDefault(r => r.SeasonId == CurrentSeasonId && r.Team == 1);
 

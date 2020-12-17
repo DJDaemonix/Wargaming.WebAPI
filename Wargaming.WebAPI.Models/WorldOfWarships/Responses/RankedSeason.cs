@@ -4,13 +4,13 @@
 
 namespace Wargaming.WebAPI.Models.WorldOfWarships.Responses
 {
-	public class RankedSeason
+	public record RankedSeason
 	{
-		public int Id { get; set; }
+		public int Id { get; init; }
 
-		public long StartAtSeconds { get; set; }
+		public long StartAtSeconds { get; init; }
 
-		public string Name { get; set; }
+		public string Name { get; init; }
 
 		public DateTime StartAt => DateTime.UnixEpoch.AddSeconds(StartAtSeconds);
 	}

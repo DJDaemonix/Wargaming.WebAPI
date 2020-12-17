@@ -1,13 +1,13 @@
 namespace Wargaming.WebAPI.Models.WorldOfWarships.Responses
 {
-	public class Map
+	public record Map
 	{
-		public string Name { get; set; }
+		public string Name { get; init; }
 
-		public string Description { get; set; }
+		public string Description { get; init; }
 
-		public string Icon { get; set; }
+		public string Icon { get; init; }
 
-		public int MapId { get; set; }
+		public int MapId { get; init; }
 	}
 }

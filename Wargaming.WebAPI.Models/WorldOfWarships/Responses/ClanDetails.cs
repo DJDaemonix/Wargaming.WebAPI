@@ -2,10 +2,10 @@
 {
 	public class ClanDetails
 	{
-		public long Id { get; set; }
+		public long Id { get; init; }
 
-		public string Tag { get; set; }
+		public string Tag { get; init; }
 
-		public string Name { get; set; }
+		public string Name { get; init; }
 	}
 }

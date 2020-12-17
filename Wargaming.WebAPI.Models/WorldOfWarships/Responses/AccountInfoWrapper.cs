@@ -1,8 +1,8 @@
 ﻿namespace Wargaming.WebAPI.Models.WorldOfWarships.Responses
 {
-	public class AccountInfoWrapper
+	public record AccountInfoWrapper
 	{
-		public bool HiddenProfile { get; set; }
-		public AccountStats[] Stats { get; set; }
+		public bool HiddenProfile { get; init; }
+		public AccountStats[] Stats { get; init; }
 	}
 }

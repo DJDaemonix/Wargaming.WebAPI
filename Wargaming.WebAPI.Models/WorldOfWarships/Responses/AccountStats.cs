@@ -1,13 +1,13 @@
 namespace Wargaming.WebAPI.Models.WorldOfWarships.Responses
 {
-	public class AccountStats
+	public record AccountStats
 	{
 		// fields=pve.battles,pve.damage_dealt,pve.frags,pve.wins,pve.xp
 
 		public int Battles
 		{
 			get => WgBattles ?? VortexBattles ?? 0;
-			set
+			init
 			{
 				if (WgBattles.HasValue)
 				{
@@ -20,13 +20,13 @@ namespace Wargaming.WebAPI.Models.WorldOfWarships.Responses
 			}
 		}
 
-		public int? VortexBattles { get; set; }
-		public int? WgBattles { get; set; }
+		public int? VortexBattles { get; init; }
+		public int? WgBattles { get; init; }
 
 		public long Xp
 		{
 			get => WgXp ?? VortexXp ?? 0;
-			set
+			init
 			{
 				if (WgXp.HasValue)
 				{
@@ -39,21 +39,21 @@ namespace Wargaming.WebAPI.Models.WorldOfWarships.Responses
 			}
 		}
 
-		public long? VortexXp { get; set; }
-		public long? WgXp { get; set; }
+		public long? VortexXp { get; init; }
+		public long? WgXp { get; init; }
 
-		public int Wins { get; set; }
+		public int Wins { get; init; }
 
-		public long Damage { get; set; }
+		public long Damage { get; init; }
 
-		public int Frags { get; set; }
+		public int Frags { get; init; }
 
 //		public MatchGroup StatsType { get; set; }
 	}
 
-	public class WgStatsWrapper
+	public record WgStatsWrapper
 	{
-		public AccountStats[] WgStats { get; set; }
-		public bool HiddenProfile { get; set; }
+		public AccountStats[] WgStats { get; init; }
+		public bool HiddenProfile { get; init; }
 	}
 }

@@ -4,16 +4,16 @@ using System;
 
 namespace Wargaming.WebAPI.Models.WorldOfWarships.Responses
 {
-	public class ClanLadder : ClanRating
+	public record ClanLadder : ClanRating
 	{
-		public ClanRating[] Ratings { get; set; }
+		public ClanRating[] Ratings { get; init; }
 
-		public int? PrimeTime { get; set; }
+		public int? PrimeTime { get; init; }
 
-		public int? PlannedPrimeTime { get; set; }
+		public int? PlannedPrimeTime { get; init; }
 
-		public string RatingRealm { get; set; }
+		public string RatingRealm { get; init; }
 
-		public int LeadingTeam { get; set; }
+		public int LeadingTeam { get; init; }
 	}
 }
