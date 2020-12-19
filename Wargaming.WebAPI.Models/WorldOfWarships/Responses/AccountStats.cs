@@ -50,10 +50,4 @@ namespace Wargaming.WebAPI.Models.WorldOfWarships.Responses
 
 //		public MatchGroup StatsType { get; set; }
 	}
-
-	public record WgStatsWrapper
-	{
-		public AccountStats[] WgStats { get; init; }
-		public bool HiddenProfile { get; init; }
-	}
 }

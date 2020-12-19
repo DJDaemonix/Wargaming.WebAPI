@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 using Wargaming.WebAPI.Models;
 using Wargaming.WebAPI.Models.Api;
 using Wargaming.WebAPI.Models.WorldOfWarships.Responses;
-
-
+using Wargaming.WebAPI.Models.WorldOfWarships.Responses.Vortex;
 
 namespace Wargaming.WebAPI.Requests
 {
-	public class VortexApiHandler : WorldOfWarshipsHandler
+	public class VortexApiHandler : ApiHandler
 	{
 		public VortexApiHandler(IHttpClientFactory factory, Region region) : base(factory)
 		{
@@ -30,12 +29,21 @@ namespace Wargaming.WebAPI.Requests
 		};
 
 		// Api : accounts/{id}
-		public async Task<IEnumerable<AccountInfo>> FetchPlayerAsync(uint accountId)
+		public async Task<AccountInfo> FetchAccountAsync(uint accountId)
 		{
 			using HttpResponseMessage response = await GetRequestAsync($"accounts/{accountId}/");
 			ApiResponse<Dictionary<uint, AccountInfo>> parsedRequest = await ParseResponseFullAsync<Dictionary<uint, AccountInfo>>(response);
 
-			return new List<AccountInfo>(parsedRequest.Data.Select(obj => obj.Value));
+			return new List<AccountInfo>(parsedRequest.Data.Select(obj => obj.Value)).First();
+		}
+
+		// Api : accounts/{id}
+		public async Task<PlayerClanData> FetchAccountClanAsync(uint accountId)
+		{
+			using HttpResponseMessage response = await GetRequestAsync($"accounts/{accountId}/clans/");
+			ApiResponse<PlayerClanData> parsedRequest = await ParseResponseFullAsync<PlayerClanData>(response);
+
+			return parsedRequest.Data;
 		}
 	}
 }

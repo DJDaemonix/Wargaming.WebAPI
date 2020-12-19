@@ -1,7 +1,3 @@
-using System;
-
-
-
 namespace Wargaming.WebAPI.Models.WorldOfWarships.Responses
 {
 	public record ClanLadder : ClanRating

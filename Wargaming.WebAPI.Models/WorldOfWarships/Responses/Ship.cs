@@ -14,7 +14,7 @@ namespace Wargaming.WebAPI.Models.WorldOfWarships.Responses
 
 		public ShipType Type { get; init; }
 
-		public bool Testship { get; init; }
+		public bool TestShip { get; init; }
 	}
 
 

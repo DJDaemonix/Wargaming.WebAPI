@@ -10,7 +10,11 @@ namespace Wargaming.WebAPI.Models.WorldOfWarships.Responses
 
 		public string Nickname { get; init; }
 
-		public long CreatedAt { get; init; }
-		public DateTime CreatedAtTime => new(CreatedAt);
+		public string Name { get => Nickname; init => Nickname = value; }
+
+		public float CreatedAt { get; init; }
+		public DateTime CreatedAtTime => DateTime.UnixEpoch.AddSeconds(CreatedAt);
+
+		public VortexAccountStats Statistics { get; init; }
 	}
 }

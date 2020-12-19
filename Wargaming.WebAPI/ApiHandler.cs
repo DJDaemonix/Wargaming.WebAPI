@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Wargaming.WebAPI.Models;
 using Wargaming.WebAPI.Models.Api;
@@ -25,7 +26,8 @@ namespace Wargaming.WebAPI
 		{
 			PropertyNamingPolicy = SnakeCaseNamingPolicy.Instance,
 			PropertyNameCaseInsensitive = true,
-			NumberHandling = System.Text.Json.Serialization.JsonNumberHandling.AllowReadingFromString
+			NumberHandling = JsonNumberHandling.AllowNamedFloatingPointLiterals | JsonNumberHandling.AllowReadingFromString,
+			
 		};
 
 
@@ -71,7 +73,11 @@ namespace Wargaming.WebAPI
 			}
 			catch
 			{
+#if RELEASE				
 				return null;
+#else
+				throw;
+#endif
 			}
 		}
 
@@ -80,7 +86,10 @@ namespace Wargaming.WebAPI
 		{
 			StringBuilder path = new(Host);
 			path.Append(endpoint);
-			path.AppendFormat("?{0}={1}", "application_id", AppId);
+			if (AppId is not null)
+			{
+				path.AppendFormat("?{0}={1}", "application_id", AppId);
+			}
 
 			if (arguments is not null)
 			{
