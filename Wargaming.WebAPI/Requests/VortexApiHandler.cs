@@ -18,6 +18,11 @@ namespace Wargaming.WebAPI.Requests
 			ClientFactory = factory ?? throw new ArgumentNullException(nameof(factory));
 			Host = GetApiHost(region);
 		}
+		public VortexApiHandler(IHttpClientFactory factory, WorldOfWarshipsHandlerOptions options) : base(factory)
+		{
+			ClientFactory = factory ?? throw new ArgumentNullException(nameof(factory));
+			Host = GetApiHost(options.Region);
+		}
 
 		private static string GetApiHost(Region region) => region switch
 		{
