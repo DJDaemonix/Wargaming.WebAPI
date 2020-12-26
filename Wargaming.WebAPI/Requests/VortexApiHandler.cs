@@ -39,7 +39,7 @@ namespace Wargaming.WebAPI.Requests
 			using HttpResponseMessage response = await GetRequestAsync($"accounts/{accountId}/");
 			ApiResponse<Dictionary<uint, AccountInfo>> parsedRequest = await ParseResponseFullAsync<Dictionary<uint, AccountInfo>>(response);
 
-			return new List<AccountInfo>(parsedRequest.Data.Select(obj => obj.Value)).First();
+			return new(parsedRequest.Data.Select(obj => obj.Value).First()) { AccountId = accountId };
 		}
 
 		// Api : accounts/{id}

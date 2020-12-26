@@ -16,5 +16,13 @@ namespace Wargaming.WebAPI.Models.WorldOfWarships.Responses
 		public DateTime CreatedAtTime => DateTime.UnixEpoch.AddSeconds(CreatedAt);
 
 		public VortexAccountStats Statistics { get; init; }
+
+		public AccountInfo(AccountInfo input)
+		{
+			AccountId = input.AccountId;
+			Nickname = input.Nickname;
+			CreatedAt = input.CreatedAt;
+			Statistics = input.Statistics;
+		}
 	}
 }
