@@ -1,5 +1,7 @@
 ﻿using Wargaming.WebAPI.Models;
 
+
+
 namespace Wargaming.WebAPI
 {
 	public static class ApiProperties

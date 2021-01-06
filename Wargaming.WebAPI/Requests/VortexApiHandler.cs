@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Wargaming.WebAPI.Models;
 using Wargaming.WebAPI.Models.Api;
 using Wargaming.WebAPI.Models.WorldOfWarships.Responses;
-using Wargaming.WebAPI.Models.WorldOfWarships.Responses.Vortex;
+
+
 
 namespace Wargaming.WebAPI.Requests
 {
@@ -39,7 +39,19 @@ namespace Wargaming.WebAPI.Requests
 			using HttpResponseMessage response = await GetRequestAsync($"accounts/{accountId}/");
 			ApiResponse<Dictionary<uint, AccountInfo>> parsedRequest = await ParseResponseFullAsync<Dictionary<uint, AccountInfo>>(response);
 
-			return new(parsedRequest.Data.Select(obj => obj.Value).First()) { AccountId = accountId };
+			return parsedRequest.Data.Select(obj => obj.Value).First() with { AccountId = accountId };
+		}
+		public Task<AccountInfo[]> FetchAccountsAsync(uint[] accountIds)
+		{
+			Task<AccountInfo>[] fetches = new Task<AccountInfo>[accountIds.Length];
+			for (int i = 0; i < accountIds.Length; i++)
+			{
+				Task<AccountInfo> t = FetchAccountAsync(accountIds[i]);
+				t.Start();
+				fetches[i] = t;
+			}
+
+			return Task.WhenAll(fetches);
 		}
 
 		// Api : accounts/{id}

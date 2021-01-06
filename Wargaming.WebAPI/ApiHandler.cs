@@ -57,10 +57,7 @@ namespace Wargaming.WebAPI
 			return await client.GetAsync(path);
 		}
 
-		public static async Task<TData> ParseResponseDataAsync<TData>(HttpResponseMessage response)
-		{
-			return (await ParseResponseFullAsync<TData>(response)).Data;
-		}
+		public static async Task<TData> ParseResponseDataAsync<TData>(HttpResponseMessage response) => (await ParseResponseFullAsync<TData>(response)).Data;
 
 		internal static async Task<ApiResponse<TData>> ParseResponseFullAsync<TData>(HttpResponseMessage response)
 		{
