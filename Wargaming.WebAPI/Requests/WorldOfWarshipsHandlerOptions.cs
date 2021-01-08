@@ -4,15 +4,5 @@
 
 namespace Wargaming.WebAPI.Requests
 {
-	public sealed class WorldOfWarshipsHandlerOptions
-	{
-		internal Region Region { get; init; }
-		internal string AppId { get; init; }
-
-		public WorldOfWarshipsHandlerOptions(Region region, string appId)
-		{
-			Region = region;
-			AppId = appId;
-		}
-	}
+	public sealed record WorldOfWarshipsHandlerOptions(Region Region, string AppId);
 }

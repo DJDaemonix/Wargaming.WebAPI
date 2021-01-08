@@ -17,9 +17,8 @@ namespace Wargaming.WebAPI
 	{
 		public const int MaxResultsInRequest = 100;
 
-		protected IHttpClientFactory ClientFactory { get; init; }
+		protected HttpClient Client { get; init; }
 
-		protected string Host { get; init; }
 		protected string AppId { get; init; }
 
 		protected static JsonSerializerOptions SerializerOptions { get; } = new()
@@ -31,30 +30,26 @@ namespace Wargaming.WebAPI
 		};
 
 
-		public ApiHandler(IHttpClientFactory factory, Game game, Region region, string appId)
-		{
-			ClientFactory = factory ?? throw new ArgumentNullException(nameof(factory));
-			Host = GetApiHost(game, region);
-			AppId = appId ?? throw new ArgumentNullException(nameof(appId));
-		}
 		public ApiHandler(IHttpClientFactory factory, string host, string appId)
 		{
-			ClientFactory = factory ?? throw new ArgumentNullException(nameof(factory));
-			Host = host ?? throw new ArgumentNullException(nameof(host));
+			Client = factory.CreateClient();
+			Client.BaseAddress = new(host);
 			AppId = appId;
 		}
-		protected ApiHandler(IHttpClientFactory factory)
+		protected ApiHandler(HttpClient client)
 		{
-			ClientFactory = factory ?? throw new ArgumentNullException(nameof(factory));
+			Client = client ?? throw new ArgumentNullException(nameof(client));
+		}
+
+		~ApiHandler()
+		{
+			Client.Dispose();
 		}
 
 		public async Task<HttpResponseMessage> GetRequestAsync(string endpoint, params ApiArgument[] arguments)
 		{
-			using HttpClient client = ClientFactory.CreateClient();
 			string path = BuildPath(endpoint, arguments);
-
-
-			return await client.GetAsync(path);
+			return await Client.GetAsync(path);
 		}
 
 		public static async Task<TData> ParseResponseDataAsync<TData>(HttpResponseMessage response) => (await ParseResponseFullAsync<TData>(response)).Data;
@@ -81,8 +76,8 @@ namespace Wargaming.WebAPI
 
 		protected string BuildPath(string endpoint, params ApiArgument[] arguments)
 		{
-			StringBuilder path = new(Host);
-			path.Append(endpoint);
+			StringBuilder path = new(endpoint);
+
 			if (AppId is not null)
 			{
 				path.AppendFormat("?{0}={1}", "application_id", AppId);

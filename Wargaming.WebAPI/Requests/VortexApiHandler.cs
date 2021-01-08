@@ -13,18 +13,12 @@ namespace Wargaming.WebAPI.Requests
 {
 	public class VortexApiHandler : ApiHandler
 	{
-		public VortexApiHandler(IHttpClientFactory factory, Region region) : base(factory)
-		{
-			ClientFactory = factory ?? throw new ArgumentNullException(nameof(factory));
-			Host = GetApiHost(region);
-		}
-		public VortexApiHandler(IHttpClientFactory factory, WorldOfWarshipsHandlerOptions options) : base(factory)
-		{
-			ClientFactory = factory ?? throw new ArgumentNullException(nameof(factory));
-			Host = GetApiHost(options.Region);
-		}
+		public VortexApiHandler(IHttpClientFactory factory, Region region) : base(factory, GetApiHost(region), null) { }
+		public VortexApiHandler(IHttpClientFactory factory, WorldOfWarshipsHandlerOptions options) : base(factory, GetApiHost(options.Region), null) { }
+		public VortexApiHandler(IHttpClientFactory factory) : base(factory.CreateClient(nameof(VortexApiHandler))) { }
 
-		private static string GetApiHost(Region region) => region switch
+
+		public static string GetApiHost(Region region) => region switch
 		{
 			Region.EU => "https://vortex.worldofwarships.eu/api/",
 			Region.NA => "https://vortex.worldofwarships.com/api/",
