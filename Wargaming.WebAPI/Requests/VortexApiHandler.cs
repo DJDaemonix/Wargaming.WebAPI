@@ -13,8 +13,8 @@ namespace Wargaming.WebAPI.Requests
 {
 	public class VortexApiHandler : ApiHandler
 	{
-		public VortexApiHandler(IHttpClientFactory factory, Region region) : base(factory, GetApiHost(region), null) { }
-		public VortexApiHandler(IHttpClientFactory factory, WorldOfWarshipsHandlerOptions options) : base(factory, GetApiHost(options.Region), null) { }
+		public VortexApiHandler(IHttpClientFactory factory, Region region) : base(factory, GetApiHost(region), null, false) { }
+		public VortexApiHandler(IHttpClientFactory factory, WorldOfWarshipsHandlerOptions options) : base(factory, GetApiHost(options.Region), null, false) { }
 		public VortexApiHandler(IHttpClientFactory factory) : base(factory.CreateClient(nameof(VortexApiHandler))) { }
 
 
@@ -30,7 +30,7 @@ namespace Wargaming.WebAPI.Requests
 		// Api : accounts/{id}
 		public async Task<AccountInfo> FetchAccountAsync(uint accountId)
 		{
-			using HttpResponseMessage response = await GetRequestAsync($"accounts/{accountId}/");
+			using HttpResponseMessage response = await GetRequestHandler($"accounts/{accountId}/");
 			ApiResponse<Dictionary<uint, AccountInfo>> parsedRequest = await ParseResponseFullAsync<Dictionary<uint, AccountInfo>>(response);
 
 			return parsedRequest.Data.Select(obj => obj.Value).First() with { AccountId = accountId };
@@ -51,7 +51,7 @@ namespace Wargaming.WebAPI.Requests
 		// Api : accounts/{id}
 		public async Task<PlayerClanData> FetchAccountClanAsync(uint accountId)
 		{
-			using HttpResponseMessage response = await GetRequestAsync($"accounts/{accountId}/clans/");
+			using HttpResponseMessage response = await GetRequestHandler($"accounts/{accountId}/clans/");
 			ApiResponse<PlayerClanData> parsedRequest = await ParseResponseFullAsync<PlayerClanData>(response);
 
 			return parsedRequest.Data;

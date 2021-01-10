@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 using System.Threading.Tasks;
 using Wargaming.WebAPI.Models;
 using Wargaming.WebAPI.Models.Api;
@@ -16,8 +17,14 @@ namespace Wargaming.WebAPI
 	public class ApiHandler
 	{
 		public const int MaxResultsInRequest = 100;
+		public const int MaxConcurrentRequests = 20;
+
 
 		protected HttpClient Client { get; init; }
+		protected TimeSpanSemaphore ClientSemaphore { get; init; }
+
+		public delegate Task<HttpResponseMessage> ApiRequestHandler(string endpoint, params ApiArgument[] arguments);
+		public ApiRequestHandler GetRequestHandler { get; init; }
 
 		protected string AppId { get; init; }
 
@@ -30,15 +37,19 @@ namespace Wargaming.WebAPI
 		};
 
 
-		public ApiHandler(IHttpClientFactory factory, string host, string appId)
+		public ApiHandler(IHttpClientFactory factory, string host, string appId, bool throttled)
 		{
 			Client = factory.CreateClient();
 			Client.BaseAddress = new(host);
 			AppId = appId;
+
+			ClientSemaphore = new(MaxConcurrentRequests, new(0, 0, 1)); // Semaphore : 20 API requests per second
+			GetRequestHandler += throttled ? GetRequestThrottledAsync : GetRequestAsync;
 		}
 		protected ApiHandler(HttpClient client)
 		{
 			Client = client ?? throw new ArgumentNullException(nameof(client));
+			GetRequestHandler = GetRequestAsync;
 		}
 
 		~ApiHandler()
@@ -46,10 +57,20 @@ namespace Wargaming.WebAPI
 			Client.Dispose();
 		}
 
-		public async Task<HttpResponseMessage> GetRequestAsync(string endpoint, params ApiArgument[] arguments)
+		protected async Task<HttpResponseMessage> GetRequestAsync(string endpoint, params ApiArgument[] arguments)
 		{
 			string path = BuildPath(endpoint, arguments);
 			return await Client.GetAsync(path);
+		}
+
+		protected async Task<HttpResponseMessage> GetRequestThrottledAsync(string endpoint, params ApiArgument[] arguments)
+		{
+			string path = BuildPath(endpoint, arguments);
+
+
+			HttpResponseMessage response = null; 
+			await ClientSemaphore.RunAsync(async () => response = await Client.GetAsync(path), CancellationToken.None);
+			return response;
 		}
 
 		public static async Task<TData> ParseResponseDataAsync<TData>(HttpResponseMessage response) => (await ParseResponseFullAsync<TData>(response)).Data;
