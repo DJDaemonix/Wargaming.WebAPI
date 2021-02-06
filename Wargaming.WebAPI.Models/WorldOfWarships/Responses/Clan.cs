@@ -1,4 +1,8 @@
-﻿namespace Wargaming.WebAPI.Models.WorldOfWarships.Responses
+﻿using System;
+
+
+
+namespace Wargaming.WebAPI.Models.WorldOfWarships.Responses
 {
 	public record Clan
 	{
@@ -21,5 +25,20 @@
 		CommissionedOfficer,
 		LineOfficer,
 		Midshipman
+	}
+
+	public static class ClanRoleUtils
+	{
+		public static ClanRole ParseClanRole(this string role) => role switch
+		{
+			"commander" => ClanRole.Commander,
+			"executive_officer" => ClanRole.ExecutiveOfficer,
+			"recruiter" or "recruitment_officer" => ClanRole.Recruiter,
+			"commissioned_officer" => ClanRole.CommissionedOfficer,
+			"line_officer" or "officer" => ClanRole.LineOfficer,
+			"midshipman" or "private" => ClanRole.Midshipman,
+
+			_ => throw new NotImplementedException()
+		};
 	}
 }

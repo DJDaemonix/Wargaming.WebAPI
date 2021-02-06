@@ -48,7 +48,7 @@ namespace Wargaming.WebAPI.Requests
 			return Task.WhenAll(fetches);
 		}
 
-		// Api : accounts/{id}
+		// Api : accounts/{id}/clans
 		public async Task<PlayerClanData> FetchAccountClanAsync(uint accountId)
 		{
 			using HttpResponseMessage response = await GetRequestHandler($"accounts/{accountId}/clans/");

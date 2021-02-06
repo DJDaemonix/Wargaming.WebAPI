@@ -32,5 +32,13 @@ namespace Wargaming.WebAPI.Requests
 
 			return new List<AccountInfo>(parsedRequest.Data.Select(obj => obj.Value));
 		}
+
+
+		// Api : clans/list/
+		public async Task<IEnumerable<ClanListing>> ListClansAsync(string search)
+		{
+			using HttpResponseMessage response = await GetRequestHandler("clans/list/", new ApiArgument("search", search));
+			return (await ParseResponseFullAsync<IEnumerable<ClanListing>>(response)).Data;
+		}
 	}
 }
