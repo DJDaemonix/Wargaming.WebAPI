@@ -17,12 +17,6 @@ namespace Wargaming.WebAPI.Models.WorldOfWarships.Responses
 
 		public VortexAccountStats Statistics { get; init; }
 
-		public AccountInfo(AccountInfo input)
-		{
-			AccountId = input.AccountId;
-			Nickname = input.Nickname;
-			CreatedAt = input.CreatedAt;
-			Statistics = input.Statistics;
-		}
+		public bool HiddenProfile { get; init; }
 	}
 }
